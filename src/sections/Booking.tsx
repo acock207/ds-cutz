@@ -59,19 +59,21 @@ export default function Booking() {
             })
             .then((res) => res.json())
             .then((data) => {
-              if (data.url) {
-                window.location.href = data.url;
-              } else {
-                console.error('No checkout URL');
-                setStatus('error');
-                setLoading(false);
-              }
-            })
-            .catch((err) => {
-              console.error(err);
-              setStatus('error');
-              setLoading(false);
-            });
+               if (data.url) {
+                 window.location.href = data.url;
+               } else {
+                 console.error('No checkout URL', data);
+                 alert('Payment Error: ' + (data.message || 'Could not create checkout session'));
+                 setStatus('error');
+                 setLoading(false);
+               }
+             })
+             .catch((err) => {
+               console.error('Checkout error:', err);
+               alert('Payment Connection Error: ' + err.message + '. (Note: This payment feature requires the site to be hosted on Vercel with Stripe keys configured. It may not work on localhost.)');
+               setStatus('error');
+               setLoading(false);
+             });
             
             form.current?.reset();
             setSelectedIds([]);
